@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; media-src 'self' data: blob:; connect-src 'self' data: blob:; worker-src 'self' blob:; manifest-src 'self'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
+<title>QR Studio — Free Custom QR Code Generator (PNG &amp; SVG) | S3eidat Tools</title>
+<meta name="description" content="Make QR codes for links, Wi-Fi, contacts, email, SMS, phone and locations. Custom colors, rounded dots, center logo, PNG and SVG download. Free, private, nothing uploaded.">
+<meta property="og:title" content="QR Studio — free, private QR code generator">
+<meta property="og:description" content="Custom QR codes for links, Wi-Fi and contacts. Runs 100% in your browser.">
+<meta property="og:image" content="screenshot.png">
+<link rel="icon" href="kit/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="kit/kit.css">
+<link rel="stylesheet" href="app.css">
+<script src="kit/kit.js"></script>
+<script src="lib/qrcode.js"></script>
+</head>
+<body data-tool="qr-studio">
+<main class="s3-main">
+  <section class="s3-hero">
+    <h1>QR Studio</h1>
+    <p>QR codes for links, Wi-Fi, contacts and more, with your colors, rounded dots and a logo. Made on your device, never uploaded.</p>
+  </section>
+
+  <div class="grid-2 qs-grid">
+    <div class="stack">
+      <section class="card">
+        <h2>Content</h2>
+        <div class="seg qs-types" id="type" role="group" aria-label="QR type">
+          <button aria-pressed="true" data-v="url">URL</button>
+          <button aria-pressed="false" data-v="text">Text</button>
+          <button aria-pressed="false" data-v="wifi">Wi-Fi</button>
+          <button aria-pressed="false" data-v="vcard">Contact</button>
+          <button aria-pressed="false" data-v="email">Email</button>
+          <button aria-pressed="false" data-v="sms">SMS</button>
+          <button aria-pressed="false" data-v="tel">Phone</button>
+          <button aria-pressed="false" data-v="geo">Location</button>
+        </div>
+        <div class="stack mt" id="fields"></div>
+      </section>
+
+      <section class="card">
+        <h2>Style</h2>
+        <div class="stack">
+          <div class="row">
+            <label class="field qs-color">Dots<span class="row"><input type="color" id="fg" value="#0d0f12"><input class="input mono" id="fgHex" value="#0d0f12" maxlength="7" spellcheck="false" aria-label="Dot color hex"></span></label>
+            <label class="field qs-color">Background<span class="row"><input type="color" id="bg" value="#ffffff"><input class="input mono" id="bgHex" value="#ffffff" maxlength="7" spellcheck="false" aria-label="Background color hex"></span></label>
+            <button class="btn ghost small" id="swap" title="Swap colors"><svg class="i"><use href="#i-refresh"/></svg>Swap</button>
+          </div>
+          <div class="row">
+            <span class="faint">Shape</span>
+            <div class="seg" id="shape" role="group" aria-label="Dot shape">
+              <button aria-pressed="true" data-v="square">Square</button>
+              <button aria-pressed="false" data-v="rounded">Rounded</button>
+              <button aria-pressed="false" data-v="dots">Dots</button>
+            </div>
+          </div>
+          <div class="row">
+            <span class="faint">Error correction</span>
+            <div class="seg" id="ecl" role="group" aria-label="Error correction level">
+              <button aria-pressed="false" data-v="L" title="Recovers ~7% damage">L</button>
+              <button aria-pressed="true" data-v="M" title="Recovers ~15% damage">M</button>
+              <button aria-pressed="false" data-v="Q" title="Recovers ~25% damage">Q</button>
+              <button aria-pressed="false" data-v="H" title="Recovers ~30% damage">H</button>
+            </div>
+          </div>
+          <label class="field"><span>Quiet margin: <span id="marginVal">4</span> modules</span><input type="range" id="margin" min="0" max="8" step="1" value="4"></label>
+          <div class="row">
+            <label class="btn small" id="logoBtn"><svg class="i"><use href="#i-image"/></svg>Add center logo<input type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml,image/gif" hidden></label>
+            <button class="btn ghost small" id="logoClear" hidden><svg class="i"><use href="#i-x"/></svg>Remove logo</button>
+            <span class="faint" id="logoNote"></span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="card qs-preview">
+      <div class="row between">
+        <h2>Preview</h2>
+        <span class="chip" id="status">Waiting</span>
+      </div>
+      <div class="qs-stage mt checker"><canvas id="cv" width="720" height="720" aria-label="QR code preview" role="img"></canvas></div>
+      <p class="faint center" id="info"></p>
+      <div class="chip warn qs-warn" id="warn" hidden></div>
+      <div class="row mt">
+        <label class="field grow">PNG size
+          <select class="select" id="size">
+            <option value="256">256 × 256</option>
+            <option value="512">512 × 512</option>
+            <option value="1024" selected>1024 × 1024</option>
+            <option value="2048">2048 × 2048</option>
+          </select>
+        </label>
+      </div>
+      <div class="row mt">
+        <button class="btn primary grow" id="png"><svg class="i"><use href="#i-download"/></svg>PNG</button>
+        <button class="btn grow" id="svg"><svg class="i"><use href="#i-download"/></svg>SVG</button>
+        <button class="btn" id="copy" title="Copy the encoded text"><svg class="i"><use href="#i-copy"/></svg>Text</button>
+      </div>
+      <details class="mt qs-raw">
+        <summary class="faint">Encoded text</summary>
+        <pre class="out mt" id="payload"></pre>
+      </details>
+    </section>
+  </div>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

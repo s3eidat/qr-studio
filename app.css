@@ -1,0 +1,15 @@
+.qs-grid { align-items: start; }
+.qs-types { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); width: 100%; }
+.qs-types button { padding: 6px 4px; }
+.qs-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.qs-fields .full { grid-column: 1 / -1; }
+@media (max-width: 480px) { .qs-fields { grid-template-columns: minmax(0, 1fr); } }
+.qs-color .row { gap: 6px; flex-wrap: nowrap; }
+.qs-color .input { width: 108px; }
+.qs-preview { position: sticky; top: 76px; }
+.qs-stage { display: grid; place-items: center; padding: 18px; border-radius: 14px; border: 1px solid var(--line); }
+.qs-stage canvas { width: 100%; max-width: 340px; height: auto; aspect-ratio: 1; border-radius: 6px; box-shadow: 0 10px 30px -14px rgba(0,0,0,.5); }
+.qs-warn { display: block; border-radius: 10px; padding: 8px 12px; line-height: 1.45; background: var(--surface-2); }
+.qs-raw summary { cursor: pointer; }
+.qs-raw .out { max-height: 160px; overflow: auto; font-size: 12px; }
+@media (max-width: 760px) { .qs-preview { position: static; } }
